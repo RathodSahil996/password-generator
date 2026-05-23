@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Password Generator</title>
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #2b1055, #7597de);
+    }
+
+    .card {
+        background: #1f1f2e;
+        width: 320px;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        color: #fff;
+    }
+
+    .card h2 {
+        text-align: center;
+        margin-bottom: 15px;
+        letter-spacing: 1px;
+    }
+
+    .password-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #2d2d44;
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+
+    .password-box input {
+        width: 85%;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: #ffcc70;
+        font-size: 16px;
+    }
+
+    .password-box button {
+        background: none;
+        border: none;
+        color: #7dff7d;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .length-box {
+        margin-bottom: 15px;
+    }
+
+    .length-box label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+    }
+
+    input[type="range"] {
+        width: 100%;
+    }
+
+    .options label {
+        display: block;
+        margin: 8px 0;
+        font-size: 14px;
+    }
+
+    .strength {
+        margin: 10px 0;
+        font-size: 14px;
+    }
+
+    .generate-btn {
+        width: 100%;
+        padding: 10px;
+        background: linear-gradient(90deg, #ff6a88, #ffcc70);
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<div class="card">
+    <h2>PASSWORD GENERATOR</h2>
+
+    <div class="password-box">
+        <input type="text" id="password" readonly placeholder="PASSWORD">
+        <button onclick="copyPassword()">📋</button>
+    </div>
+
+    <div class="length-box">
+        <label>
+            <span>Password Length</span>
+            <span id="lenVal">10</span>
+        </label>
+        <input type="range" min="4" max="20" value="10" id="length">
+    </div>
+
+    <div class="options">
+        <label><input type="checkbox" id="upper" checked> Include Uppercase Letters</label>
+        <label><input type="checkbox" id="lower"> Include Lowercase Letters</label>
+        <label><input type="checkbox" id="number"> Include Numbers</label>
+        <label><input type="checkbox" id="symbol"> Include Symbols</label>
+    </div>
+
+    <div class="strength" id="strength">Strength: Medium</div>
+
+    <button class="generate-btn" onclick="generatePassword()">GENERATE PASSWORD</button>
+</div>
+
+<script>
+    const lengthSlider = document.getElementById("length");
+    const lenVal = document.getElementById("lenVal");
+    const passwordField = document.getElementById("password");
+    const strengthText = document.getElementById("strength");
+
+    lengthSlider.oninput = () => {
+        lenVal.textContent = lengthSlider.value;
+    };
+
+    function generatePassword() {
+        let chars = "";
+        const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const lower = "abcdefghijklmnopqrstuvwxyz";
+        const number = "0123456789";
+        const symbol = "!@#$%^&*()_+";
+
+        if (document.getElementById("upper").checked) chars += upper;
+        if (document.getElementById("lower").checked) chars += lower;
+        if (document.getElementById("number").checked) chars += number;
+        if (document.getElementById("symbol").checked) chars += symbol;
+
+        if (chars === "") {
+            alert("Select at least one option!");
+            return;
+        }
+
+        let password = "";
+        for (let i = 0; i < lengthSlider.value; i++) {
+            password += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+
+        passwordField.value = password;
+        checkStrength();
+    }
+
+    function checkStrength() {
+        let strength = 0;
+        document.querySelectorAll(".options input").forEach(cb => {
+            if (cb.checked) strength++;
+        });
+
+        if (lengthSlider.value >= 12 && strength >= 3)
+            strengthText.textContent = "Strength: Strong";
+        else if (strength >= 2)
+            strengthText.textContent = "Strength: Medium";
+        else
+            strengthText.textContent = "Strength: Weak";
+    }
+
+    function copyPassword() {
+        navigator.clipboard.writeText(passwordField.value);
+        alert("Password copied!");
+    }
+</script>
+
+</body>
+</html>
