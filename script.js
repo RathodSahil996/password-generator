@@ -2,7 +2,7 @@ const inputslider = document.querySelector("[data-lenghtSlider]");
 const lenghtDisplay = document.querySelector("[data-lenghtNumber]");
 const passwordDisplay = document.querySelector("[data-passwordDisplay]");
 const copyBtn = document.querySelector("[data-copy]");
-const copyMsg = document.querySelector("[data-copyMsg]");
+const
 const uppercaseCheck = document.querySelector("#uppercase");
 const lowercaseCheck = document.querySelector("#lowercase");
 const numberCheck = document.querySelector("#numbers");
